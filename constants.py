@@ -16,5 +16,12 @@ personal_class_name = 'Personal'
 employment_class_name = 'Employment'
 vehicle_class_name = 'Vehicle'
 update_class_name = 'UpdateStatus'
+class_names = personal_class_name,employment_class_name,update_class_name, vehicle_class_name
 
-class_names = personal_class_name,employment_class_name,vehicle_class_name,update_class_name
+personal_fields_compress = [True, True, True, True, True]
+employment_fields_compress = [True, True,True,False]
+vehicle_fields_compress = [False, True, True, True]
+update_fields_compress = [False, True, True]
+compress_fields = (personal_fields_compress, employment_fields_compress,
+                   update_fields_compress, vehicle_fields_compress)
+
