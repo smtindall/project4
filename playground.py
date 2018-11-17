@@ -6,26 +6,7 @@ import itertools
 from datetime import datetime
 
 
-# for fname in constants.fnames:
-#     print(f'{fname}')
-#     with open(fname) as f:
-#         print(next(f),end='')
-#         print(next(f),end='')
-#         print(next(f),end='')
-#     print()
 
-
-# for fname in constants.fnames:
-#     print(fname)
-#     reader = parse_utils.csv_parser(fname)
-#     print(next(reader))
-#     print(next(reader),end='\n')
-
-# reader=parse_utils.csv_parser(constants.fname_update)
-# for _ in range(3):
-#     record = next(reader)
-
-#
 # for fname, class_name, parser in zip(constants.fnames,constants.class_names,constants.parsers):
 #     file_iter = parse_utils.iter_file(fname,class_name, parser)
 #     print(fname)
@@ -38,15 +19,30 @@ from datetime import datetime
 # print(list(next(gen)))
 # print(list(next(gen)))
 
-data_iter = parse_utils.iter_combined(constants.fnames,constants.class_names,constants.parsers,constants.compress_fields)
-
-for row in itertools.islice(data_iter,5):
-    print(row)
-
 print('-' * 20)
-cutoff_date = datetime (2018,3,1)
-filtered_iter = parse_utils.filtered_iter_combined(constants.fnames,constants.class_names,
+
+def group_key(item):
+    return item.gender, item.vehicle_make
+
+cutoff_date = datetime (2017,3,1)
+data = parse_utils.filtered_iter_combined(constants.fnames,constants.class_names,
                                                    constants.parsers,constants.compress_fields,
                                                    key=lambda row:row.last_updated >= cutoff_date)
-for row in filtered_iter:
+sorted_data = sorted(data,key=group_key)
+
+group_1 = itertools.groupby(sorted_data,key=group_key)
+group_2 = itertools.groupby(sorted_data,key=group_key)
+
+
+group_f = (item for item in group_1 if item[0][0] == 'Female')
+data_f = ((item[0][1], len(list(item[1]))) for item in group_f)
+
+for row in data_f:
+    print(row)
+
+
+group_m = (item for item in group_2 if item[0][0] == 'Male')
+data_m = ((item[0][1], len(list(item[1]))) for item in group_m)
+
+for row in data_m:
     print(row)
