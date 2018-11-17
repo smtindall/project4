@@ -3,6 +3,7 @@ from itertools import islice
 import constants
 import parse_utils
 import itertools
+from datetime import datetime
 
 
 # for fname in constants.fnames:
@@ -40,4 +41,12 @@ import itertools
 data_iter = parse_utils.iter_combined(constants.fnames,constants.class_names,constants.parsers,constants.compress_fields)
 
 for row in itertools.islice(data_iter,5):
+    print(row)
+
+print('-' * 20)
+cutoff_date = datetime (2018,3,1)
+filtered_iter = parse_utils.filtered_iter_combined(constants.fnames,constants.class_names,
+                                                   constants.parsers,constants.compress_fields,
+                                                   key=lambda row:row.last_updated >= cutoff_date)
+for row in filtered_iter:
     print(row)
